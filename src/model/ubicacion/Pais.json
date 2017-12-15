@@ -1,0 +1,22 @@
+{
+    "type": "entity",
+    "fields": 
+        {
+            "nombre": {
+                "type": "string",
+                "validation": {
+                    "required": true,
+                    "minlenght": 5,
+                    "maxlenght": 20
+                }
+            },
+            "apellido": {
+                "type": "string",
+                "validation": {
+                    "required": true,
+                    "minlenght": 5,
+                    "maxlenght": 20
+                }
+            }
+        }
+}
