@@ -6,16 +6,24 @@
                 "type": "string",
                 "validation": {
                     "required": true,
-                    "minlenght": 5,
-                    "maxlenght": 20
+                    "min": 5,
+                    "max": 20
                 }
             },
             "apellido": {
                 "type": "string",
                 "validation": {
                     "required": true,
-                    "minlenght": 5,
-                    "maxlenght": 20
+                    "min": 5,
+                    "max": 20
+                }
+            },
+            "edad": {
+                "type": "int",
+                "validation": {
+                    "required": true,
+                    "min": 5,
+                    "max": 10
                 }
             }
         }

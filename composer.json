@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "kint-php/kint": "^2.2"
+        "kint-php/kint": "^2.2",
+        "filp/whoops": "^2.1"
     },
     "autoload": {
         "psr-4": {
