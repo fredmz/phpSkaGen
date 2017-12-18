@@ -1,18 +1,18 @@
 <?php
 namespace Fredmz\Generator;
-
+use Fredmz\Generator\Backend\Generator as BackendGenerator;
 class Generator {
     const ENTER = "\r\n";
     private $entity = [];
     private $entityName = '';
     private $dataSource = '';
-    private $package = '';
+    private $relativePackage = '';
     private $rootPackage = 'pe.org.institutoapoyo.sig';
     private $genDir = '';
     private $genDirBackend = '';
     private $genDirFrontEnd = '';
     
-    /* @var $backendGenerator BackendGenerator */
+    /* @var $backendGenerator Generator */
     private $backendGenerator;
 
     function __construct(string $dirModel, string $class, string $genDirectory) {
@@ -26,7 +26,7 @@ class Generator {
                 $this->entity,
                 $this->genDir,
                 $this->rootPackage,
-                $this->package);
+                $this->relativePackage);
     }
 
     private function setGenPath(string $genDirectory) {
@@ -41,7 +41,7 @@ class Generator {
                 .DIRECTORY_SEPARATOR
                 . str_replace('.', DIRECTORY_SEPARATOR, $this->rootPackage)
                 .DIRECTORY_SEPARATOR.'module'
-                .DIRECTORY_SEPARATOR.$this->package;
+                .DIRECTORY_SEPARATOR.$this->relativePackage;
     }
 
     private function setEntityInfo(string $class) {
@@ -49,7 +49,7 @@ class Generator {
         $size = count($dir);
         if ($size == 2) {
             $this->entityName = $dir[1];
-            $this->package = $dir[0];
+            $this->relativePackage = $dir[0];
         } else {
             throw new Exception("The class has to have a module package");
         }

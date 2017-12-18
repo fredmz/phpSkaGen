@@ -6,28 +6,35 @@
  * and open the template in the editor.
  */
 
-namespace Fredmz\Generator;
+namespace Fredmz\Generator\Backend;
 
 /**
- * Description of BackendGenerator
+ * Description of Generator
  *
  * @author fmartinez
  */
-class BackendGenerator {
+class Generator {
     private $entityName;
     private $genDir;
-    /* @var $entityGenerator BackendEntityGenerator */
+    /* @var $entityGenerator EntityGenerator */
     private $entityGenerator;
+
+    /**
+     * @var $serviceGenerator ServiceGenerator
+     */
+    private $serviceGenerator;
+
     private $entity;
-    private $rootPackage;
+    private $projectPackage;
     private $package;
     
-    function __construct($entityName, $entity, $genDir, $rootPackage, $package) {
+    function __construct($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage) {
         $this->entity = $entity;
         $this->entityName = $entityName;
         $this->genDir = $genDir;
-        $this->rootPackage = $rootPackage;
-        $this->entityGenerator = new BackendEntityGenerator($entityName, $entity, $genDir, $rootPackage, $package);
+        $this->projectPackage = $projectPackage;
+        $this->entityGenerator = new EntityGenerator($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage);
+        $this->serviceGenerator = new ServiceGenerator($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage);
     }
 
     function createEntity() {
@@ -37,12 +44,12 @@ class BackendGenerator {
     
     function createService() {
         $this->createGeneratedDirBackend();
-        echo "createService not implemented<br>";
+        $this->serviceGenerator->createServiceClass();
     }
     
     function createController() {
         $this->createGeneratedDirBackend();
-        echo "createController not implemented<br>";
+        echo "<br>createController not implemented<br>";
     }
     
     private function getGenDomainDir() {

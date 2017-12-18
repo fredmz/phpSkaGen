@@ -1,34 +1,34 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-namespace Fredmz\Generator;
+namespace Fredmz\Generator\Backend;
+use Fredmz\Generator\FileGenerator;
+use Fredmz\Generator\StringSet;
 
 /**
- * Description of BackendEntityGenerator
+ * Description of EntityGenerator
  *
  * @author fmartinez
  */
-class BackendEntityGenerator {
+class EntityGenerator {
     const ENTER = "\r\n";
     private $entityName;
     private $entityFile;
     private $dirGenBackend;
-    private $rootPackage;
-    private $package;
+    private $projectPackage;
+    private $relativeEntityPackage;
     private $entity;
-    private $imports = ['javax.persistence.*'];
+    /**
+     * @var StringSet
+     */
+    private $imports;
     
-    function __construct($entityName, $entity, $dirGenBackend, $rootPackage, $package) {
+    function __construct($entityName, $entity, $dirGenBackend, $projectPackage, $relativeEntityPackage) {
         $this->entity = $entity;
         $this->entityName = $entityName;
         $this->dirGenBackend = $dirGenBackend;
-        $this->rootPackage = $rootPackage;
-        $this->package = $package;
+        $this->projectPackage = $projectPackage;
+        $this->relativeEntityPackage = $relativeEntityPackage;
+        $this->imports = new StringSet();
     }
 
     private function getRepositoryContent() {
@@ -39,13 +39,13 @@ class BackendEntityGenerator {
         $content.= $this->entityName. ', Long>';
         return $content;
     }
-    
+
+    private function getModulePackage() {
+        return $this->projectPackage.'.module'.'.'.$this->relativeEntityPackage;
+    }
+
     private function getDomainPackage() {
         return $this->getModulePackage().'.domain';
-    }
-    
-    private function getModulePackage() {
-        return $this->rootPackage.'.module'.'.'.$this->package;
     }
     
     private function getGenDomainDir() {
@@ -56,29 +56,33 @@ class BackendEntityGenerator {
         $type = '';
         $extend = '';
         if ($this->entity['type'] == 'entity') {
-            $this->imports[] = 'org.springframework.data.jpa.repository.JpaRepository';
-            $this->imports[] = 'pe.org.institutoapoyo.sig.utils.AbstractAuditingEntity';
+            $this->imports->addList([
+                'javax.persistence.*',
+                'org.springframework.data.jpa.repository.JpaRepository',
+                $this->projectPackage.'.utils.AbstractAuditingEntity'
+            ]);
             $type = 'data';
             $extend = ': AbstractAuditingEntity()';
         }
         $arrFields = [];
-        foreach ($this->entity['fields'] as $fieldName => $fieldAttributes) {
-            $fieldGenerator = new BackendFieldGenerator($fieldName, $fieldAttributes);
+        foreach ($this->entity['fields'] as $field) {
+            $fieldGenerator = new FieldGenerator($field['name'], $field['type'], $field['validation']);
             $arrFields[] = $fieldGenerator->getContent();
-            $this->addImports($fieldGenerator->getImports());
+            $this->imports->addList($fieldGenerator->getImports()->getItems());
         }
         $content = self::ENTER;
         $content.= $this->getImportsAsString();
         $content.= self::ENTER;
         $content.= "$type class $this->entityName (".self::ENTER;
         $content.= $this->getIdField();
+        $content.= self::ENTER;
         $content.= implode(',', $arrFields).self::ENTER.')'.$extend;
         return $content;
     }
     
     private function getImportsAsString() {
         $content = '';
-        foreach($this->imports as $import) {
+        foreach($this->imports->getItems() as $import) {
             $content.= 'import '.$import.self::ENTER;
         }
         return $content;
@@ -87,8 +91,7 @@ class BackendEntityGenerator {
     private function getIdField() {
         $content = '';
         if ($this->entity['type'] == 'entity') {
-            $content.= "\t@Id".self::ENTER;
-            $content.= "\t@GeneratedValue(strategy = GenerationType.AUTO)".self::ENTER;
+            $content.= "\t@Id @GeneratedValue(strategy = GenerationType.AUTO)".self::ENTER;
             $content.= "\tvar id: Long?,";
         }
         return $content;
@@ -100,17 +103,5 @@ class BackendEntityGenerator {
         $content.= $this->getRepositoryContent();
         $this->entityFile = $this->getGenDomainDir().DIRECTORY_SEPARATOR."$this->entityName.kt";
         FileGenerator::createFile($this->entityFile, $content);
-    }
-    
-    private function addImport(string $import) {
-        if (!in_array($import, $this->imports)) {
-            $this->imports[] = $import;
-        }
-    }
-
-    private function addImports(array $imports) {
-        foreach($imports as $import) {
-            $this->addImport($import);
-        }
     }
 }

@@ -14,23 +14,17 @@ const GEN_DIR = ROOT_DIR.DIRECTORY_SEPARATOR.'generated';
 <html>
     <head>
         <title>Generator</title>
+        <link rel="stylesheet" type="text/css" href="static/prism.css">
         <style>
             body {background-color: #9192a0;}
-            .code {
-                white-space: pre;
-                font-size: 0.9em;
-                font-family: "Courier New";
-                padding: 5px;
-                border: 1px solid #456454;
-                background-color: #fffff2;
-                color: #3e3a52;
-                margin: 5px;
+            pre {
+                font-size:12px;
                 max-width: 600px;
-                min-height: 150px;
-                overflow-x: auto;
-                overflow-y: auto;
+                max-height: 300px;
+                overflow: auto;
             }
         </style>
+        <script src="static/prism.js"></script>
     </head>
     <body>
 <?php 

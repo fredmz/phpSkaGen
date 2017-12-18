@@ -18,13 +18,29 @@ class FileGenerator {
         $classFile = fopen($file, "w");
         fwrite($classFile, $content);
         fclose($classFile);
-        
+        $arrFile = explode('.', $file);
+        $ext = $arrFile[count($arrFile) - 1];
+        $languages = [
+            'kt' => 'kotlin',
+            'js' => 'javascript',
+            'html' => 'html',
+            'css' => 'css'
+        ];
+
         $fileContent = file_get_contents($file);
         $fileContent = str_replace("<", "&#60;", $fileContent);
         $fileContent = str_replace(">", "&#62;", $fileContent);
-        $html = '<div class="code">';
+        $html = '<pre><code class="language-'.$languages[$ext].'">';
         $html.= $fileContent;
-        $html.= '</div>';
+        $html.= '</code></pre>';
         echo $html;
+    }
+
+    static function renderFile(string $file, array $data) {
+        $fileContent = file_get_contents($file);
+        foreach ($data as $key => $value) {
+            $fileContent = str_replace('{{'.$key.'}}', $value, $fileContent);
+        }
+        return $fileContent;
     }
 }
