@@ -38,9 +38,9 @@ class Generator {
         $this->entityName = $entityName;
         $this->genDir = $genDir;
         $this->projectPackage = $projectPackage;
-        $this->entityGenerator = new EntityGenerator($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage);
-        $this->serviceGenerator = new ServiceGenerator($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage);
-        $this->controllerGenerator = new ControllerGenerator($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage);
+        $this->entityGenerator = new EntityGenerator($entityName, $entity, $this->getKotlinDir(), $projectPackage, $relativeEntityPackage);
+        $this->serviceGenerator = new ServiceGenerator($entityName, $entity, $this->getKotlinDir(), $projectPackage, $relativeEntityPackage);
+        $this->controllerGenerator = new ControllerGenerator($entityName, $entity, $this->getKotlinDir(), $projectPackage, $relativeEntityPackage);
     }
 
     function createEntity() {
@@ -59,20 +59,28 @@ class Generator {
     }
     
     private function getGenDomainDir() {
-        return $this->genDir.DIRECTORY_SEPARATOR.'domain';
+        return $this->getKotlinDir().DIRECTORY_SEPARATOR.'domain';
     }
     
     private function getGenServiceDir() {
-        return $this->genDir.DIRECTORY_SEPARATOR.'service';
+        return $this->getKotlinDir().DIRECTORY_SEPARATOR.'service';
     }
     
     private function getGenControllerDir() {
-        return $this->genDir.DIRECTORY_SEPARATOR.'web';
+        return $this->getKotlinDir().DIRECTORY_SEPARATOR.'web';
+    }
+
+    private function getKotlinDir() {
+        $package = str_replace('.', DIRECTORY_SEPARATOR, $this->projectPackage);
+        return $this->genDir.DIRECTORY_SEPARATOR
+                    .'src'.DIRECTORY_SEPARATOR
+                    .'main'.DIRECTORY_SEPARATOR
+                    .'kotlin'.DIRECTORY_SEPARATOR.$package;
     }
     
     private function createGeneratedDirBackend() {
-        if (!is_dir($this->genDir)) {
-            mkdir($this->genDir, 0777, true);
+        if (!is_dir($this->getKotlinDir())) {
+            mkdir($this->getKotlinDir(), 0777, true);
         }
         if (!is_dir($this->getGenDomainDir())) {
             mkdir($this->getGenDomainDir(), 0777, true);
