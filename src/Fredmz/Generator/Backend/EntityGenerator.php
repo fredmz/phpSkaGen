@@ -97,7 +97,7 @@ class EntityGenerator {
         return $content;
     }
     
-    function createEntityClass() {
+    function createClass() {
         $content = 'package '. $this->getDomainPackage().self::ENTER;
         $content.= $this->getConstructorContent();
         $content.= $this->getRepositoryContent();

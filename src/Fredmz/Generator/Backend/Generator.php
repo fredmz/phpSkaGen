@@ -24,6 +24,11 @@ class Generator {
      */
     private $serviceGenerator;
 
+    /**
+     * @var $controllerGenerator ControllerGenerator
+     */
+    private $controllerGenerator;
+
     private $entity;
     private $projectPackage;
     private $package;
@@ -35,21 +40,22 @@ class Generator {
         $this->projectPackage = $projectPackage;
         $this->entityGenerator = new EntityGenerator($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage);
         $this->serviceGenerator = new ServiceGenerator($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage);
+        $this->controllerGenerator = new ControllerGenerator($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage);
     }
 
     function createEntity() {
         $this->createGeneratedDirBackend();
-        $this->entityGenerator->createEntityClass();
+        $this->entityGenerator->createClass();
     }
     
     function createService() {
         $this->createGeneratedDirBackend();
-        $this->serviceGenerator->createServiceClass();
+        $this->serviceGenerator->createClass();
     }
     
     function createController() {
         $this->createGeneratedDirBackend();
-        echo "<br>createController not implemented<br>";
+        $this->controllerGenerator->createClass();
     }
     
     private function getGenDomainDir() {
