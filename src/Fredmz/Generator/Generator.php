@@ -1,47 +1,66 @@
 <?php
 namespace Fredmz\Generator;
 use Fredmz\Generator\Backend\Generator as BackendGenerator;
+use Fredmz\Generator\Frontend\Generator as FrontendGenerator;
 class Generator {
     const ENTER = "\r\n";
     private $entity = [];
     private $entityName = '';
     private $dataSource = '';
-    private $relativePackage = '';
-    private $rootPackage = 'pe.org.institutoapoyo.sig';
+    private $relativeModulePackage = '';
+    private $projectPackage = '';
     private $genDir = '';
     private $genDirBackend = '';
     private $genDirFrontEnd = '';
     
-    /* @var $backendGenerator Generator */
+    /* @var $backendGenerator BackendGenerator */
     private $backendGenerator;
 
-    function __construct(string $dirModel, string $class, string $genDirectory) {
+    /**
+     * @var $frontendGenerator FrontendGenerator
+     */
+    private $frontendGenerator;
+
+    function __construct(string $dirModel, string $class, string $projectPackage, string $genDirectory) {
         $this->setDatasource($dirModel
                 .DIRECTORY_SEPARATOR
                 .str_replace('.', DIRECTORY_SEPARATOR, $class)
                 .'.json');
+        $this->projectPackage = $projectPackage;
         $this->setEntityInfo($class);
         $this->setGenPath($genDirectory);
         $this->backendGenerator = new BackendGenerator($this->entityName,
                 $this->entity,
                 $this->genDir,
-                $this->rootPackage,
-                $this->relativePackage);
+                $this->projectPackage,
+                $this->relativeModulePackage);
+
+        /*$this->frontendGenerator = new FrontendGenerator($this->entityName,
+            $this->entity,
+            $this->genDir,
+            $this->relativeModulePackage);*/
     }
 
     private function setGenPath(string $genDirectory) {
         $this->genDir = $genDirectory;
         $this->setDirGenBackend();
-        $this->genDirFrontEnd = $this->genDir.DIRECTORY_SEPARATOR.'angular';
+        $this->setDirGenFrontend();
     }
-    
+
+    private function setDirGenFrontend() {
+        $this->genDirFrontEnd = $this->genDir
+            .DIRECTORY_SEPARATOR.'webapp'
+            .DIRECTORY_SEPARATOR.'app'
+            .DIRECTORY_SEPARATOR.'modules';
+    }
+
     private function setDirGenBackend() {
         $this->genDirBackend = $this->genDir
                 .DIRECTORY_SEPARATOR.'kotlin'
                 .DIRECTORY_SEPARATOR
-                . str_replace('.', DIRECTORY_SEPARATOR, $this->rootPackage)
+                . str_replace('.', DIRECTORY_SEPARATOR, $this->projectPackage)
                 .DIRECTORY_SEPARATOR.'module'
-                .DIRECTORY_SEPARATOR.$this->relativePackage;
+                .DIRECTORY_SEPARATOR.$this->relativeModulePackage;
     }
 
     private function setEntityInfo(string $class) {
@@ -49,18 +68,18 @@ class Generator {
         $size = count($dir);
         if ($size == 2) {
             $this->entityName = $dir[1];
-            $this->relativePackage = $dir[0];
+            $this->relativeModulePackage = $dir[0];
         } else {
-            throw new Exception("The class has to have a module package");
+            throw new Exception("The class needs the format 'Module/Class'");
         }
     }
     
     private function setDatasource(string $datasource) {
         $this->dataSource = $datasource;
-        $this->calculateEntityFromDatasource();
+        $this->readEntityFromDatasource();
     }
 
-    private function calculateEntityFromDatasource(){
+    private function readEntityFromDatasource(){
         $string = file_get_contents($this->dataSource);
         $this->entity = json_decode($string, true);
     }
@@ -81,5 +100,11 @@ class Generator {
     
     function createBackendControllerClass() {
         $this->backendGenerator->createController();
+    }
+
+    function createFrontend() {
+        $this->frontendGenerator->createEntity();
+        $this->frontendGenerator->createService();
+        $this->frontendGenerator->createComponents();
     }
 }
