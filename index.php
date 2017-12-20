@@ -60,8 +60,9 @@ if ($ROOT_DIR != NULL) {
 <?php
     if ($PROJECT_PACKAGE != NULL) {
         $gen = new Generator($MODEL_DIR, 'ubicacion.Pais', $PROJECT_PACKAGE, $GEN_DIR);
-        $gen->createBackend();
-        //    $gen->createFrontend();
+//        $gen->createBackend();
+        $gen->getFrontendGenerator()->getModelGenerator()->createClass();
+        $gen->getFrontendGenerator()->getServiceGenerator()->createClass();
     }?>
     </body>
 </html>

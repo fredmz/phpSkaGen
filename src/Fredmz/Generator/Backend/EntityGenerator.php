@@ -3,6 +3,7 @@
 namespace Fredmz\Generator\Backend;
 use Fredmz\Generator\FileGenerator;
 use Fredmz\Generator\StringSet;
+use Fredmz\Generator\FileFormatter;
 
 /**
  * Description of EntityGenerator
@@ -78,7 +79,7 @@ class EntityGenerator {
         $content.= $this->getImportsAsString();
         $content.= self::ENTER;
         $content.= '@Entity'. self::ENTER;
-        $content.= '@Table(name = "'. strtolower(substr($this->moduleName, 0, 3)).'_'.\Fredmz\Generator\SnakeConverter::fromCamelCase($this->entityName).'")';
+        $content.= '@Table(name = "'. strtolower(substr($this->moduleName, 0, 3)).'_'. FileFormatter::fromCamelCaseToUnderline($this->entityName).'")';
         $content.= self::ENTER;
         $content.= "$type class $this->entityName (".self::ENTER;
         $content.= $this->getIdField();

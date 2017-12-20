@@ -23,6 +23,7 @@ class FileGenerator {
         $languages = [
             'kt' => 'kotlin',
             'js' => 'javascript',
+            'ts' => 'typescript',
             'html' => 'html',
             'css' => 'css'
         ];

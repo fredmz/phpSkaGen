@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fmartinez
- * Date: 18/12/2017
- * Time: 10:21 AM
- */
 
 namespace Fredmz\Generator\Backend;
 
@@ -13,9 +7,14 @@ use Fredmz\Generator\ValidationRules;
 class BackendValidationRules extends ValidationRules
 {
     /**
-     * @var $type BackendType
+     * @var BackendType $type
      */
     protected $type;
+    /**
+     *
+     * @var string
+     */
+    protected $genericType;
 
     const SIZE = 'javax.validation.constraints.Size';
     const MIN = 'javax.validation.constraints.Min';

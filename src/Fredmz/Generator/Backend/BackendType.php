@@ -13,11 +13,11 @@ use Fredmz\Generator\GenericTypes;
 
 class BackendType
 {
-    const String = 'String';
-    const BigDecimal = 'BigDecimal';
-    const Int = 'Int';
-    const LocalDate = 'LocalDate';
-    const ZonedDateTime = 'ZonedDateTime';
+    const STRING = 'String';
+    const BIG_DECIMAL = 'BigDecimal';
+    const INT = 'Int';
+    const LOCAL_DATE = 'LocalDate';
+    const ZONED_DATETIME = 'ZonedDateTime';
 
     /**
      * Backend type of kotlin
@@ -34,12 +34,12 @@ class BackendType
     {
         $this->genericType = $genericType;
         $types = [
-            GenericTypes::String => self::String,
-            GenericTypes::Currency => self::BigDecimal,
-            GenericTypes::Int => self::Int,
-            GenericTypes::Text => self::String,
-            GenericTypes::Date => self::LocalDate,
-            GenericTypes::Datetime => self::ZonedDateTime
+            GenericTypes::String => self::STRING,
+            GenericTypes::Currency => self::BIG_DECIMAL,
+            GenericTypes::Int => self::INT,
+            GenericTypes::Text => self::STRING,
+            GenericTypes::Date => self::LOCAL_DATE,
+            GenericTypes::Datetime => self::ZONED_DATETIME
         ];
         $this->type = $types[$genericType];
     }
@@ -48,14 +48,14 @@ class BackendType
      * @return bool
      */
     function isString() {
-        return ($this->type == self::String);
+        return ($this->type == self::STRING);
     }
 
     /**
      * @return bool
      */
     function isNumeric() {
-        return ($this->type == self::BigDecimal || $this->type == Self::Int);
+        return ($this->type == self::BIG_DECIMAL || $this->type == Self::INT);
     }
 
     /**

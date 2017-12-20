@@ -56,6 +56,9 @@ class ServiceGenerator
     }
 
     function createClass() {
+        if (!is_dir($this->dirGen)) {
+            mkdir($this->dirGen, 0777, true);
+        }
         $data = [
             'package' => $this->getServicePackage(),
             'imports' => $this->getImporstAsString(),

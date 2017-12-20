@@ -41,17 +41,14 @@ class Generator {
     }
 
     function createEntity() {
-        $this->createGeneratedDirBackend();
         $this->entityGenerator->createClass();
     }
     
     function createService() {
-        $this->createGeneratedDirBackend();
         $this->serviceGenerator->createClass();
     }
     
     function createController() {
-        $this->createGeneratedDirBackend();
         $this->controllerGenerator->createClass();
     }
     
@@ -73,14 +70,5 @@ class Generator {
         $this->kotlinDir = $this->genDir.DIRECTORY_SEPARATOR
                         .'kotlin'.DIRECTORY_SEPARATOR
                         .str_replace('.', DIRECTORY_SEPARATOR, $this->projectPackage);
-    }
-    
-    private function createGeneratedDirBackend() {
-        if (!is_dir($this->getGenServiceDir())) {
-            mkdir($this->getGenServiceDir(), 0777, true);
-        }
-        if (!is_dir($this->getGenControllerDir())) {
-            mkdir($this->getGenControllerDir(), 0777, true);
-        }
     }
 }

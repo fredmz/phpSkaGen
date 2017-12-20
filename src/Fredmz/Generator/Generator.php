@@ -7,7 +7,7 @@ class Generator {
     private $entity = [];
     private $entityName = '';
     private $dataSource = '';
-    private $relativeModulePackage = '';
+    private $moduleName = '';
     private $projectPackage = '';
     private $genDir = '';
     
@@ -31,12 +31,12 @@ class Generator {
                 $this->entity,
                 $this->genDir,
                 $this->projectPackage,
-                $this->relativeModulePackage);
+                $this->moduleName);
 
-        /*$this->frontendGenerator = new FrontendGenerator($this->entityName,
+        $this->frontendGenerator = new FrontendGenerator($this->entityName,
             $this->entity,
             $this->genDir,
-            $this->relativeModulePackage);*/
+            $this->moduleName);
     }
 
     private function setGenPath(string $genDirectory) {
@@ -48,9 +48,9 @@ class Generator {
         $size = count($dir);
         if ($size == 2) {
             $this->entityName = $dir[1];
-            $this->relativeModulePackage = $dir[0];
+            $this->moduleName = $dir[0];
         } else {
-            throw new Exception("The class needs the format 'Module/Class'");
+            throw new Exception("The class needs the format 'module/Class'");
         }
     }
     
@@ -62,6 +62,14 @@ class Generator {
     private function readEntityFromDatasource(){
         $string = file_get_contents($this->dataSource);
         $this->entity = json_decode($string, true);
+    }
+    
+    /**
+     * 
+     * @return FrontendGenerator
+     */
+    function getFrontendGenerator(): FrontendGenerator {
+        return $this->frontendGenerator;
     }
     
     function createBackend() {
@@ -80,11 +88,5 @@ class Generator {
     
     function createBackendControllerClass() {
         $this->backendGenerator->createController();
-    }
-
-    function createFrontend() {
-        $this->frontendGenerator->createEntity();
-        $this->frontendGenerator->createService();
-        $this->frontendGenerator->createComponents();
     }
 }

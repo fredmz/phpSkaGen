@@ -6,17 +6,17 @@
  * Time: 11:11 AM
  */
 
-namespace Fredmz\Generator\Backend;
+namespace Fredmz\Generator\Frontend;
 
 
 use Fredmz\Generator\GenericTypes;
 
 class FrontendType
 {
-    const string = 'string';
-    const number = 'number';
-    const any = 'any';
-    const Date = 'Date';
+    const STRING = 'string';
+    const NUMBER = 'number';
+    const ANY = 'any';
+    const DATE = 'Date';
 
     /**
      * Backend type of kotlin
@@ -33,12 +33,12 @@ class FrontendType
     {
         $this->genericType = $genericType;
         $types = [
-            GenericTypes::String => self::string,
-            GenericTypes::Currency => self::number,
-            GenericTypes::Int => self::number,
-            GenericTypes::Text => self::string,
-            GenericTypes::Date => self::Date,
-            GenericTypes::Datetime => self::Date
+            GenericTypes::String => self::STRING,
+            GenericTypes::Currency => self::NUMBER,
+            GenericTypes::Int => self::NUMBER,
+            GenericTypes::Text => self::STRING,
+            GenericTypes::Date => self::DATE,
+            GenericTypes::Datetime => self::DATE
         ];
         $this->type = $types[$genericType];
     }
@@ -47,14 +47,14 @@ class FrontendType
      * @return bool
      */
     function isString() {
-        return ($this->type == self::string);
+        return ($this->type == self::STRING);
     }
 
     /**
      * @return bool
      */
     function isNumeric() {
-        return ($this->type == self::number);
+        return ($this->type == self::NUMBER);
     }
 
     /**
