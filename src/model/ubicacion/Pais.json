@@ -1,0 +1,32 @@
+{
+    "type": "entity",
+    "fields": [
+        {
+        "name" : "nombre",
+        "type" : "String",
+        "validation": {
+            "required": true,
+            "min": 5,
+            "max": 20
+            }
+        },
+        {
+            "name" : "apellido",
+            "type" : "String",
+            "validation": {
+                "required": true,
+                "min": 5,
+                "max": 20
+            }
+        },
+        {
+            "name" : "edad",
+            "type" : "Int",
+            "validation": {
+                "required": true,
+                "min": 5,
+                "max": 20
+            }
+        }
+    ]
+}

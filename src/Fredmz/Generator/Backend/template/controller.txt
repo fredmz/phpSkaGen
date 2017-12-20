@@ -1,0 +1,93 @@
+package {{package}}
+{{imports}}
+import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+
+import javax.validation.Valid
+import java.net.URI
+import java.net.URISyntaxException
+
+import java.util.Optional
+
+/**
+ * REST controller for managing {{domainClass}}.
+ */
+@RestController
+@RequestMapping("{{url}}")
+class {{domainClass}}Controller(
+    val {{domainObject}}Service: {{domainClass}}Service
+) {
+    val entityName: String = "{{domainObject}}"
+
+    /**
+    * POST  {{url}} : Create a new {{domainObject}}.
+    *
+    * @param {{domainObject}} the {{domainObject}} to create
+    * @return the ResponseEntity with status 201 (Created) and with body the new {{domainObject}}, or with status 400 (Bad Request) if the {{domainObject}} has already an ID
+    * @throws URISyntaxException if the Location URI syntax is incorrect
+    */
+    @PostMapping("")
+    fun create(@Valid @RequestBody {{domainObject}}: {{domainClass}}): ResponseEntity<{{domainClass}}> {
+        val result = {{domainObject}}Service.create({{domainObject}})
+        return ResponseEntity.created(URI("{{url}}/" + result.id))
+            .headers(HeaderUtil().createEntityCreationAlert(entityName, result.id.toString()))
+            .body(result)
+    }
+
+    /**
+    * PUT  {{url}} : Updates an existing {{domainObject}}.
+    *
+    * @param {{domainObject}} the {{domainObject}} to update
+    * @return the ResponseEntity with status 200 (OK) and with body the updated {{domainObject}},
+    * or with status 400 (Bad Request) if the {{domainObject}} is not valid,
+    * or with status 500 (Internal Server Error) if the {{domainObject}} couldnt be updated
+    * @throws URISyntaxException if the Location URI syntax is incorrect
+    */
+    @PutMapping("")
+    fun update(@Valid @RequestBody {{domainObject}}: {{domainClass}}): ResponseEntity<{{domainClass}}> {
+        val result = {{domainObject}}Service.update({{domainObject}})
+        return ResponseEntity.ok()
+            .headers(HeaderUtil().createEntityUpdateAlert(entityName, {{domainObject}}.id.toString()))
+            .body(result)
+    }
+
+    /**
+    * GET  {{url}} : get all the {{domainObject}} objects.
+    *
+    * @param pageable the pagination information
+    * @return the ResponseEntity with status 200 (OK) and the list of {{domainObject}} objects in body
+    */
+    @GetMapping("")
+    fun findAll(pageable: Pageable): ResponseEntity<List<{{domainClass}}>> {
+        val page = {{domainObject}}Service.findAll(pageable)
+        val headers = PaginationUtil().generatePaginationHttpHeaders(page, "{{url}}")
+        return ResponseEntity(page.content, headers, HttpStatus.OK)
+    }
+
+    /**
+    * GET  {{url}}/:id : get the "id" {{domainObject}}.
+    *
+    * @param id the id of the {{domainObject}} to retrieve
+    * @return the ResponseEntity with status 200 (OK) and with body the {{domainObject}}, or with status 404 (Not Found)
+    */
+    @GetMapping("/{id}")
+    fun get{{domainClass}}(@PathVariable id: Long): ResponseEntity<{{domainClass}}> {
+        val {{domainObject}} = {{domainObject}}Service.findOne(id)
+        return ResponseUtil().wrapOrNotFound(Optional.ofNullable({{domainObject}}))
+    }
+
+    /**
+    * DELETE  {{url}}/:id : delete the "id" {{domainObject}}.
+    *
+    * @param id the id of the {{domainObject}} to delete
+    * @return the ResponseEntity with status 200 (OK)
+    */
+    @DeleteMapping("/{id}")
+    fun delete{{domainClass}}(@PathVariable id: Long): ResponseEntity<Void> {
+        {{domainObject}}Service.delete(id)
+        return ResponseEntity.ok().headers(HeaderUtil().createEntityDeletionAlert(entityName, id.toString())).build()
+    }
+
+}

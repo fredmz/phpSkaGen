@@ -1,0 +1,20 @@
+{
+    "name": "fred/gen",
+    "require-dev": {
+    },
+    "authors": [
+        {
+            "name": "Frederic Martínez",
+            "email": "fmartinez@institutoapoyo.org.pe"
+        }
+    ],
+    "require": {
+        "kint-php/kint": "^2.2",
+        "filp/whoops": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fredmz\\Generator\\": "src/Fredmz/Generator"
+        }
+    }
+}
