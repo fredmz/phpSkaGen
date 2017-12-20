@@ -1,28 +1,25 @@
 package {{package}}
 {{imports}}
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
+import javax.validation.Valid
+import java.net.URI
+import java.net.URISyntaxException
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Optional
 
 /**
  * REST controller for managing {{domainClass}}.
  */
 @RestController
 @RequestMapping("{{url}}")
-public class {{domainClass}}Controller(
+class {{domainClass}}Controller(
     val {{domainObject}}Service: {{domainClass}}Service
 ) {
-    val ENTITY_NAME: String = '{{domainObject}}'
+    val entityName: String = "{{domainObject}}"
 
     /**
     * POST  {{url}} : Create a new {{domainObject}}.
@@ -33,10 +30,10 @@ public class {{domainClass}}Controller(
     */
     @PostMapping("")
     fun create(@Valid @RequestBody {{domainObject}}: {{domainClass}}): ResponseEntity<{{domainClass}}> {
-        var result = {{domainObject}}Service.create({{domainObject}});
+        val result = {{domainObject}}Service.create({{domainObject}})
         return ResponseEntity.created(URI("{{url}}/" + result.id))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.id.toString()))
-            .body(result);
+            .headers(HeaderUtil().createEntityCreationAlert(entityName, result.id.toString()))
+            .body(result)
     }
 
     /**
@@ -49,11 +46,11 @@ public class {{domainClass}}Controller(
     * @throws URISyntaxException if the Location URI syntax is incorrect
     */
     @PutMapping("")
-    fun update(@Valid @RequestBody {{domainClass}} {{domainObject}}): ResponseEntity<{{domainClass}}> {
-        var result = {{domainObject}}Service.update({{domainObject}});
+    fun update(@Valid @RequestBody {{domainObject}}: {{domainClass}}): ResponseEntity<{{domainClass}}> {
+        val result = {{domainObject}}Service.update({{domainObject}})
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, {{domainObject}}.id.toString()))
-            .body(result);
+            .headers(HeaderUtil().createEntityUpdateAlert(entityName, {{domainObject}}.id.toString()))
+            .body(result)
     }
 
     /**
@@ -63,10 +60,10 @@ public class {{domainClass}}Controller(
     * @return the ResponseEntity with status 200 (OK) and the list of {{domainObject}} objects in body
     */
     @GetMapping("")
-    fun findAll(@ApiParam Pageable pageable): ResponseEntity<List<{{domainClass}}>> {
-        var page = {{domainObject}}Service.findAll(pageable);
-        var headers = PaginationUtil.generatePaginationHttpHeaders(page, "{{url}}");
-        return ResponseEntity<>(page.content, headers, HttpStatus.OK);
+    fun findAll(pageable: Pageable): ResponseEntity<List<{{domainClass}}>> {
+        val page = {{domainObject}}Service.findAll(pageable)
+        val headers = PaginationUtil().generatePaginationHttpHeaders(page, "{{url}}")
+        return ResponseEntity(page.content, headers, HttpStatus.OK)
     }
 
     /**
@@ -76,9 +73,9 @@ public class {{domainClass}}Controller(
     * @return the ResponseEntity with status 200 (OK) and with body the {{domainObject}}, or with status 404 (Not Found)
     */
     @GetMapping("/{id}")
-    public ResponseEntity<{{domainClass}}> get{{domainClass}}(@PathVariable Long id) {
-        var {{domainObject}} = {{domainObject}}Service.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable({{domainObject}}));
+    fun get{{domainClass}}(@PathVariable id: Long): ResponseEntity<{{domainClass}}> {
+        val {{domainObject}} = {{domainObject}}Service.findOne(id)
+        return ResponseUtil().wrapOrNotFound(Optional.ofNullable({{domainObject}}))
     }
 
     /**
@@ -88,9 +85,9 @@ public class {{domainClass}}Controller(
     * @return the ResponseEntity with status 200 (OK)
     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete{{domainClass}}(@PathVariable Long id) {
-        {{domainObject}}Service.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    fun delete{{domainClass}}(@PathVariable id: Long): ResponseEntity<Void> {
+        {{domainObject}}Service.delete(id)
+        return ResponseEntity.ok().headers(HeaderUtil().createEntityDeletionAlert(entityName, id.toString())).build()
     }
 
 }

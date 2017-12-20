@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Fredmz\Generator\Backend;
 
 /**
@@ -31,16 +25,19 @@ class Generator {
 
     private $entity;
     private $projectPackage;
-    private $package;
+    private $kotlinDir;
+    private $moduleName;
     
-    function __construct($entityName, $entity, $genDir, $projectPackage, $relativeEntityPackage) {
+    function __construct($entityName, $entity, $genDir, $projectPackage, $moduleName) {
         $this->entity = $entity;
         $this->entityName = $entityName;
         $this->genDir = $genDir;
         $this->projectPackage = $projectPackage;
-        $this->entityGenerator = new EntityGenerator($entityName, $entity, $this->getKotlinDir(), $projectPackage, $relativeEntityPackage);
-        $this->serviceGenerator = new ServiceGenerator($entityName, $entity, $this->getKotlinDir(), $projectPackage, $relativeEntityPackage);
-        $this->controllerGenerator = new ControllerGenerator($entityName, $entity, $this->getKotlinDir(), $projectPackage, $relativeEntityPackage);
+        $this->moduleName = $moduleName;
+        $this->setKotlinDir();
+        $this->entityGenerator = new EntityGenerator($entityName, $entity, $this->kotlinDir, $projectPackage, $moduleName);
+        $this->serviceGenerator = new ServiceGenerator($entityName, $entity, $this->kotlinDir, $projectPackage, $moduleName);
+        $this->controllerGenerator = new ControllerGenerator($entityName, $entity, $this->kotlinDir, $projectPackage, $moduleName);
     }
 
     function createEntity() {
@@ -58,33 +55,27 @@ class Generator {
         $this->controllerGenerator->createClass();
     }
     
-    private function getGenDomainDir() {
-        return $this->getKotlinDir().DIRECTORY_SEPARATOR.'domain';
-    }
-    
     private function getGenServiceDir() {
-        return $this->getKotlinDir().DIRECTORY_SEPARATOR.'service';
+        return $this->kotlinDir
+                .DIRECTORY_SEPARATOR.'module'
+                .DIRECTORY_SEPARATOR.$this->moduleName
+                .DIRECTORY_SEPARATOR.'service';
     }
     
     private function getGenControllerDir() {
-        return $this->getKotlinDir().DIRECTORY_SEPARATOR.'web';
+        return $this->kotlinDir
+                .DIRECTORY_SEPARATOR.'module'
+                .DIRECTORY_SEPARATOR.$this->moduleName
+                .DIRECTORY_SEPARATOR.'web';
     }
 
-    private function getKotlinDir() {
-        $package = str_replace('.', DIRECTORY_SEPARATOR, $this->projectPackage);
-        return $this->genDir.DIRECTORY_SEPARATOR
-                    .'src'.DIRECTORY_SEPARATOR
-                    .'main'.DIRECTORY_SEPARATOR
-                    .'kotlin'.DIRECTORY_SEPARATOR.$package;
+    private function setKotlinDir() {
+        $this->kotlinDir = $this->genDir.DIRECTORY_SEPARATOR
+                        .'kotlin'.DIRECTORY_SEPARATOR
+                        .str_replace('.', DIRECTORY_SEPARATOR, $this->projectPackage);
     }
     
     private function createGeneratedDirBackend() {
-        if (!is_dir($this->getKotlinDir())) {
-            mkdir($this->getKotlinDir(), 0777, true);
-        }
-        if (!is_dir($this->getGenDomainDir())) {
-            mkdir($this->getGenDomainDir(), 0777, true);
-        }
         if (!is_dir($this->getGenServiceDir())) {
             mkdir($this->getGenServiceDir(), 0777, true);
         }

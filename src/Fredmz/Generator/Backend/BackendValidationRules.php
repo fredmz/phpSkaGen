@@ -70,7 +70,7 @@ class BackendValidationRules extends ValidationRules
         }
         if ($this->max != null) {
             $this->imports->add(self::SIZE);
-            $this->columnAnnotationAttributes->add('maxlength = '. $this->max);
+            $this->columnAnnotationAttributes->add('length = '. $this->max);
             $arrSize[] = 'max = '.$this->max;
         }
         if (count($arrSize) > 0) {

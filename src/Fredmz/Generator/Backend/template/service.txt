@@ -18,7 +18,7 @@ class {{domainClass}}Service(
     * @return the persisted entity
     */
     fun create({{domainObject}}: {{domainClass}}): {{domainClass}} {
-        if ({{domainObject}}.id > 0) {
+        if ({{domainObject}}.id != null || {{domainObject}}.id != 0L) {
             throw RuntimeException("No se puede crear un objecto que ya existe")
         }
         return {{domainObject}}Repository.save({{domainObject}})
@@ -31,7 +31,7 @@ class {{domainClass}}Service(
     * @return the persisted entity
     */
     fun update({{domainObject}}: {{domainClass}}): {{domainClass}} {
-        if ({{domainObject}}.id == null || {{domainObject}}.id == 0) {
+        if ({{domainObject}}.id == null || {{domainObject}}.id == 0L) {
             throw RuntimeException("No se puede actualizar un objeto que no existe")
         }
         return {{domainObject}}Repository.save({{domainObject}})
@@ -49,8 +49,9 @@ class {{domainClass}}Service(
     }
 
     @Transactional(readOnly = true)
-    fun findAll(pageable: Pageable): Page<{{domainClass}}>
+    fun findAll(pageable: Pageable): Page<{{domainClass}}> {
         return {{domainObject}}Repository.findAll(pageable)
+    }
 
     /**
     *  Delete the {{{{domainObject}}}} by id.

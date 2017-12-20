@@ -16,8 +16,9 @@ if ($ROOT_DIR != NULL) {
         $_SESSION['projectPackage'] = $PROJECT_PACKAGE;
         //const ROOT_DIR = 'C:\Users\FRED\dev\php\gen';
         //$ROOT_DIR = 'E:\desarrollo\php\phpSkaGen';
-        $MODEL_DIR = $ROOT_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'model';
+        $MODEL_DIR = $ROOT_DIR . DIRECTORY_SEPARATOR . '.skagen';
         $GEN_DIR = $ROOT_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main';
+        d($GEN_DIR);
 //        $PROJECT_PACKAGE = 'pe.org.institutoapoyo.sig';
     }
 }

@@ -10,8 +10,6 @@ class Generator {
     private $relativeModulePackage = '';
     private $projectPackage = '';
     private $genDir = '';
-    private $genDirBackend = '';
-    private $genDirFrontEnd = '';
     
     /* @var $backendGenerator BackendGenerator */
     private $backendGenerator;
@@ -43,24 +41,6 @@ class Generator {
 
     private function setGenPath(string $genDirectory) {
         $this->genDir = $genDirectory;
-        $this->setDirGenBackend();
-        $this->setDirGenFrontend();
-    }
-
-    private function setDirGenFrontend() {
-        $this->genDirFrontEnd = $this->genDir
-            .DIRECTORY_SEPARATOR.'webapp'
-            .DIRECTORY_SEPARATOR.'app'
-            .DIRECTORY_SEPARATOR.'modules';
-    }
-
-    private function setDirGenBackend() {
-        $this->genDirBackend = $this->genDir
-                .DIRECTORY_SEPARATOR.'kotlin'
-                .DIRECTORY_SEPARATOR
-                . str_replace('.', DIRECTORY_SEPARATOR, $this->projectPackage)
-                .DIRECTORY_SEPARATOR.'module'
-                .DIRECTORY_SEPARATOR.$this->relativeModulePackage;
     }
 
     private function setEntityInfo(string $class) {
