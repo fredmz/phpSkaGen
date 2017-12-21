@@ -55,7 +55,8 @@ class ServiceGenerator {
             'domainClass' => $this->entityName,
             'domainFile' => $domainFile,
             'domainObject' => lcfirst($this->entityName),
-            'url' => '',
+            'url' => '/api/'.FileFormatter::fromCamelCaseToHyphen($this->moduleName)
+                .'/'.FileFormatter::fromCamelCaseToHyphen($this->entityName)
         ];
         FileGenerator::createFile($file,
                 FileGenerator::renderFile(__DIR__.'/template/service.txt', $data)

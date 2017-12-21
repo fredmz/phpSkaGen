@@ -36,7 +36,6 @@ class Generator {
         $this->entity = $entity;
         $this->entityName = $entityName;
         $this->genDir = $rootGenDirectory.DIRECTORY_SEPARATOR.'webapp'
-                .DIRECTORY_SEPARATOR.'src'
                 .DIRECTORY_SEPARATOR.'app'
                 .DIRECTORY_SEPARATOR.'module'
                 .DIRECTORY_SEPARATOR.FileFormatter::fromCamelCaseToHyphen($moduleName)
